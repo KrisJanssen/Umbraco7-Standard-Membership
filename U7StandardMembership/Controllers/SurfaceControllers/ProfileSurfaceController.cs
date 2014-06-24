@@ -138,14 +138,14 @@ namespace U7StandardMembership.Controllers.SurfaceControllers
             var membershipService = ApplicationContext.Services.MemberService;
 
             //Get Current Member
-            var member = Members.GetCurrentMember();
+            var member = membershipService.GetById(Members.GetCurrentMember().Id);
 
             //Sometimes inconsistent results with GetCurrent Member, unsure why?!
             if (member != null)
             {
 
                 //if the email is the same as the one stored then it's OK
-                if (member.GetProperty("Email").Value.ToString() == emailAddress)
+                if (member.Email == emailAddress)
                 {
                     //Email is the same as one currently stored on the member - so email ok to use & rule valid (return true, back to validator)
                     return Json(true, JsonRequestBehavior.AllowGet);
