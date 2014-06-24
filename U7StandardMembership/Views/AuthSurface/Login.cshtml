@@ -1,0 +1,61 @@
+﻿@using System.Web.Mvc
+@using System.Web.Mvc.Html
+@using Umbraco.Web
+@using U7StandardMembership.Controllers.SurfaceControllers
+@using U7StandardMembership.Models
+@model LoginViewModel
+
+@{
+    Html.EnableClientValidation(true);
+    Html.EnableUnobtrusiveJavaScript(true);
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <h4>Forgotten your password?</h4>
+        <p>
+            @Html.Raw("Don't worry we all forget our passwords from time to time and <a href='/forgotten-password' class='alert-link'>may need a reminder</a>."))
+        </p>
+
+        @foreach (ModelState modelState in ViewData.ModelState.Values)
+        {
+            var errors = modelState.Errors;
+
+            if (errors.Any())
+            {
+                <ul>
+                    @foreach (ModelError error in errors)
+                    {
+                        <li>@error.ErrorMessage</li>
+                    }
+                </ul>
+            }
+        }
+    </div>
+}
+
+
+@using (Html.BeginUmbracoForm<AuthSurfaceController>("HandleLogin"))
+{
+    @Html.AntiForgeryToken()
+
+    <fieldset>
+        <div class="form-group">
+            @Html.LabelFor(model => model.EmailAddress, "Email address", new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.EmailAddress, new { @class = "form-control", placeholder = "Email Address" })
+            @Html.ValidationMessageFor(model => model.EmailAddress, string.Empty, new { @class = "help-block" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Password, "Password", new { @class = "control-label" })
+            @Html.PasswordFor(model => model.Password, new { @class = "form-control", placeholder = "Password" })
+            @Html.ValidationMessageFor(model => model.Password, string.Empty, new { @class = "help-block" })
+        </div>
+
+        @Html.HiddenFor(Model => Model.ReturnUrl)
+
+        <button type="submit" class="btn btn-default">"Login"</button>
+
+    </fieldset>
+}

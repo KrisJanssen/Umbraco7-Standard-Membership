@@ -1,0 +1,75 @@
+@using System.Web.Mvc.Html
+@using U7StandardMembership.Controllers.SurfaceControllers
+@using U7StandardMembership.Models;
+@using Umbraco.Web
+@model ProfileViewModel
+
+@{
+    Html.EnableClientValidation(true);
+    Html.EnableUnobtrusiveJavaScript(true);
+}
+
+@if (Convert.ToBoolean(TempData["IsSuccessful"]))
+{
+    <div class="alert alert-success">
+        <h4>Success, Yay!</h4>
+        <p>Profile is updated. We have succesfully updated your profile.</p>
+    </div>
+}
+
+@using (Html.BeginUmbracoForm<ProfileSurfaceController>("HandleEditProfile"))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, "Name", new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.Name, new { @class = "form-control", placeholder = "Your Name" })
+            @Html.ValidationMessageFor(model => model.Name, string.Empty, new { @class = "help-block" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.EmailAddress, "Email", new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.EmailAddress, new { @class = "form-control", placeholder = "Email Address" })
+            @Html.ValidationMessageFor(model => model.EmailAddress, string.Empty, new { @class = "help-block" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, "Description", new { @class = "control-label" })
+            @Html.TextAreaFor(model => model.Description, new { @class = "form-control", placeholder = "Description" })
+            @Html.ValidationMessageFor(model => model.Description, string.Empty, new { @class = "help-block" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProfileURL, new { @class = "control-label" })
+            <div class="input-group">
+                <span class="input-group-addon">http://site.co.uk/user/</span>
+                @Html.TextBoxFor(model => model.ProfileURL, new { @class = "form-control", placeholder = "joebloggs" })
+            </div>
+            @Html.ValidationMessageFor(model => model.ProfileURL, string.Empty, new { @class = "help-block" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Twitter, "Twitter", new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.Twitter, new { @class = "form-control", placeholder = "@Umbraco" })
+            @Html.ValidationMessageFor(model => model.Twitter, string.Empty, new { @class = "help-block" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.LinkedIn, "LinkedIn", new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.LinkedIn, new { @class = "form-control", placeholder = "LinkedIn URL" })
+            @Html.ValidationMessageFor(model => model.LinkedIn, string.Empty, new { @class = "help-block" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Skype, "Skype", new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.Skype, new { @class = "form-control", placeholder = "Skype Username" })
+            @Html.ValidationMessageFor(model => model.Skype, string.Empty, new { @class = "help-block" })
+        </div>
+
+        @Html.HiddenFor(model => model.MemberID)
+
+        <button type="submit" class="btn btn-default">Update Profile</button>
+    </fieldset>
+}
