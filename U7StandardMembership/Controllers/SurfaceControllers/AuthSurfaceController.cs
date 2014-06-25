@@ -80,7 +80,7 @@ namespace U7StandardMembership.Controllers.SurfaceControllers
                             checkMember.Properties["numberOfLogins"].Value = noLogins + 1;
 
                             //Update label with last login date to now
-                            checkMember.Properties["lastLoggedIn"].Value = DateTime.Now.ToString("dd/MM/yyyy @ HH:mm:ss");
+                            checkMember.LastLoginDate = DateTime.Now;
 
                             //Update label with last logged in IP address & Host Name
                             string hostName         = Dns.GetHostName();
@@ -252,9 +252,9 @@ namespace U7StandardMembership.Controllers.SurfaceControllers
                         //Check if date has NOT expired (been and gone)
                         if (currentTime.CompareTo(expiryTime) < 0)
                         {
-                            // TODO: Look at the proper way to update the password... find out what this raw thing is all about.
                             //Got a match, we can allow user to update password
                             //resetMember.RawPasswordValue.Password = model.Password;
+                            membershipService.SavePassword(resetMember, model.Password);
 
                             //Remove the resetGUID value
                             resetMember.Properties["resetGUID"].Value = string.Empty;
@@ -328,7 +328,7 @@ namespace U7StandardMembership.Controllers.SurfaceControllers
 
                 //Set password on the newly created member
                 // TODO: Check if this actually works...
-                createMember.RawPasswordValue = model.Password;
+                membershipService.SavePassword(createMember, model.Password);
 
                 //Set the verified email to false
                 createMember.Properties["hasVerifiedEmail"].Value = false;
@@ -346,7 +346,6 @@ namespace U7StandardMembership.Controllers.SurfaceControllers
 
                 return CurrentUmbracoPage();
             }
-
 
             //Create temporary GUID
             var tempGUID = Guid.NewGuid();
