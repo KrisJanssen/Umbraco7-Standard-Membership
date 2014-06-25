@@ -13,7 +13,7 @@
 {
     <div class="alert alert-success">
         <h4>Yay!</h4>
-        <p>You have now registered - please verify your email address to continue</p>
+        <p>Registered succesfully - please your mailbox to continue</p>
     </div>
 }
 else
@@ -51,7 +51,7 @@ else
             <div class="form-group">
                 @Html.LabelFor(model => model.ProfileURL, new { @class = "control-label" })
                 <div class="input-group">
-                    <span class="input-group-addon">http://site.co.uk/user/</span>
+                    <span class="input-group-addon">http://site.com/user/</span>
                     @Html.TextBoxFor(model => model.ProfileURL, new { @class = "form-control", placeholder = "joebloggs" })
                 </div>
                 @Html.ValidationMessageFor(model => model.ProfileURL, string.Empty, new { @class = "help-block" })
