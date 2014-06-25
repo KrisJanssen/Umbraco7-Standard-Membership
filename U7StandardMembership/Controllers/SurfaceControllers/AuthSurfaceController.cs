@@ -4,6 +4,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using U7StandardMembership.Code;
 using U7StandardMembership.Models;
 using Umbraco.Core;
 using Umbraco.Core.Persistence.Querying;
@@ -320,18 +321,17 @@ namespace U7StandardMembership.Controllers.SurfaceControllers
                 // WARNING: update to your desired MembertypeAlias...
                 var createMember = membershipService.CreateMember(model.EmailAddress, model.EmailAddress, model.Name, "CMember");
 
-                //Set password on the newly created member
-                // TODO: Check if this actually works...
-                membershipService.SavePassword(createMember, model.Password);
-
                 //Set the verified email to false
                 createMember.Properties["hasVerifiedEmail"].Value = false;
 
                 //Set the profile URL to be the member ID, so they have a unqie profile ID, until they go to set it
                 createMember.Properties["profileURL"].Value = model.ProfileURL;
 
-                //Save the changes
+                //Save the changes, if we do not do so, we cannot save the password.
                 membershipService.Save(createMember);
+
+                //Set password on the newly created member
+                membershipService.SavePassword(createMember, model.Password);
             }
             catch (Exception ex)
             {
@@ -361,8 +361,8 @@ namespace U7StandardMembership.Controllers.SurfaceControllers
             }
 
             //Send out verification email, with GUID in it
-            //EmailHelper email = new EmailHelper();
-            //email.SendVerifyEmail(model.EmailAddress, tempGUID.ToString());
+            EmailHelper email = new EmailHelper();
+            email.SendVerifyEmail(model.EmailAddress, tempGUID.ToString());
 
             //Update success flag (in a TempData key)
             TempData["IsSuccessful"] = true;
