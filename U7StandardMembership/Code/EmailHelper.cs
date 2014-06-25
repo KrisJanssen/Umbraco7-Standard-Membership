@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Net.Mime;
 using System.Web;
-//using SendGridMail;
-//using SendGridMail.Transport;
 
 namespace U7StandardMembership.Code
 {
@@ -13,98 +12,83 @@ namespace U7StandardMembership.Code
     {
         //private const string SendGridUsername   = "sendGridUsername";
         //private const string SendGridPassword   = "sendGridPassword";
-        //private const string EmailFromAddress   = "you@yoursite.com";
+        private const string EmailFromAddress   = "you@yoursite.com";
 
         public void SendResetPasswordEmail(string memberEmail, string resetGUID)
         {
-            ////Send a reset email to member
-            //// Create the email object first, then add the properties.
-            //var myMessage = SendGrid.GetInstance();
+            //Send a reset email to member
+            // Create the email object first, then add the properties.
+            var myMessage = new MailMessage(EmailFromAddress, memberEmail);
 
-            //// Add the message properties.
-            //myMessage.From = new MailAddress(EmailFromAddress);
+            //Subject
+            myMessage.Subject = "Reset your password";
 
-            ////Send to the member's email address
-            //myMessage.AddTo(memberEmail);
+            myMessage.IsBodyHtml = true;
 
-            ////Subject
-            //myMessage.Subject = "Umb Jobs - Reset Your Password";
+            //Reset link
+            string baseURL = HttpContext.Current.Request.Url.AbsoluteUri.Replace(HttpContext.Current.Request.Url.AbsolutePath, string.Empty);
+            var resetURL = baseURL + "/reset-password?resetGUID=" + resetGUID;
 
-            ////Reset link
-            //string baseURL = HttpContext.Current.Request.Url.AbsoluteUri.Replace(HttpContext.Current.Request.Url.AbsolutePath, string.Empty);
-            //var resetURL = baseURL + "/reset-password?resetGUID=" + resetGUID;
+            //HTML Message
+            string body = string.Format(
+                                "<h3>Reset Your Password</h3>" +
+                                "<p>You have requested to reset your password<br/>" +
+                                "If you have not requested to reste your password, simply ignore this email and delete it</p>" +
+                                "<p><a href='{0}'>Reset your password</a></p>",
+                                resetURL);
 
-            ////HTML Message
-            //myMessage.Html = string.Format(
-            //                    "<h3>Reset Your Password</h3>" +
-            //                    "<p>You have requested to reset your password<br/>" +
-            //                    "If you have not requested to reste your password, simply ignore this email and delete it</p>" +
-            //                    "<p><a href='{0}'>Reset your password</a></p>",
-            //                    resetURL);
+            myMessage.Body = body;
 
+            //PlainText Message
+            ContentType mimeType = new System.Net.Mime.ContentType("text/html");
+            // Add the alternate body to the message.
 
-            ////PlainText Message
-            //myMessage.Text = string.Format(
-            //                    "Reset your password" + Environment.NewLine +
-            //                    "You have requested to reset your password" + Environment.NewLine +
-            //                    "If you have not requested to reste your password, simply ignore this email and delete it" +
-            //                    Environment.NewLine + Environment.NewLine +
-            //                    "Reset your password: {0}",
-            //                    resetURL);
+            AlternateView alternate = AlternateView.CreateAlternateViewFromString(body, mimeType);
+            myMessage.AlternateViews.Add(alternate);
 
-            //// Create credentials, specifying your user name and password.
-            //var credentials = new NetworkCredential(SendGridUsername, SendGridPassword);
+            // Create an SMTP transport for sending email.
+            var transportSMTP = new SmtpClient();
 
-            //// Create an SMTP transport for sending email.
-            //var transportSMTP = SMTP.GetInstance(credentials);
-
-            //// Send the email.
-            //transportSMTP.Deliver(myMessage);
+            // Send the email.
+            transportSMTP.Send(myMessage);
         }
 
         public void SendVerifyEmail(string memberEmail, string verifyGUID)
         {
-            ////Send a reset email to member
-            //// Create the email object first, then add the properties.
-            //var myMessage = SendGrid.GetInstance();
+            //Send a reset email to member
+            // Create the email object first, then add the properties.
+            var myMessage = new MailMessage(EmailFromAddress, memberEmail);
 
-            //// Add the message properties.
-            //myMessage.From = new MailAddress(EmailFromAddress);
+            //Subject
+            myMessage.Subject = "Verify Your Email";
 
-            ////Send to the member's email address
-            //myMessage.AddTo(memberEmail);
+            myMessage.IsBodyHtml = true;
 
-            ////Subject
-            //myMessage.Subject = "Umb Jobs - Verify Your Email";
+            //Verify link
+            string baseURL = HttpContext.Current.Request.Url.AbsoluteUri.Replace(HttpContext.Current.Request.Url.AbsolutePath, string.Empty);
+            var verifyURL = baseURL + "/verify-email?verifyGUID=" + verifyGUID;
 
-            ////Verify link
-            //string baseURL = HttpContext.Current.Request.Url.AbsoluteUri.Replace(HttpContext.Current.Request.Url.AbsolutePath, string.Empty);
-            //var verifyURL = baseURL + "/verify-email?verifyGUID=" + verifyGUID;
+            //HTML Message
+            string body = string.Format(
+                                "<h3>Verify Your Email</h3>" +
+                                "<p>Click here to verify your email address and active your account today</p>" +
+                                "<p><a href='{0}'>Verify your email & active your account</a></p>",
+                                verifyURL);
 
-            ////HTML Message
-            //myMessage.Html = string.Format(
-            //                    "<h3>Verify Your Email</h3>" +
-            //                    "<p>Click here to verify your email address and active your account today</p>" +
-            //                    "<p><a href='{0}'>Verify your email & active your account</a></p>",
-            //                    verifyURL);
+            myMessage.Body = body;
 
+            //PlainText Message
+            ContentType mimeType = new System.Net.Mime.ContentType("text/html");
+            // Add the alternate body to the message.
 
-            ////PlainText Message
-            //myMessage.Text = string.Format(
-            //                    "Verify Your Email" + Environment.NewLine +
-            //                    "Click here to verify your email address and active your account today" + Environment.NewLine +
-            //                    Environment.NewLine + Environment.NewLine +
-            //                    "{0}",
-            //                    verifyURL);
+            AlternateView alternate = AlternateView.CreateAlternateViewFromString(body, mimeType);
+            myMessage.AlternateViews.Add(alternate);
 
-            //// Create credentials, specifying your user name and password.
-            //var credentials = new NetworkCredential(SendGridUsername, SendGridPassword);
+            // Create an SMTP transport for sending email.
+            var transportSMTP = new SmtpClient();
 
-            //// Create an SMTP transport for sending email.
-            //var transportSMTP = SMTP.GetInstance(credentials);
-
-            //// Send the email.
-            //transportSMTP.Deliver(myMessage);
+            // Send the email.
+            transportSMTP.Send(myMessage);
         }
     }
 }
