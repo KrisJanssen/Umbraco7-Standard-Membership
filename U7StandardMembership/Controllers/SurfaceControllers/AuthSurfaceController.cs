@@ -313,18 +313,12 @@ namespace U7StandardMembership.Controllers.SurfaceControllers
                 return PartialView("Register", model);
             }
 
-            //Member Type
-            //MemberType umbJobMemberType = MemberType.GetByAlias("Member");
-
-            //Umbraco Admin User (The Umbraco back office username who will create the member via the API)
-            //var umbUser = new User("Admin");
-
             //Model valid let's create the member
             try
             {
                 //Member createMember = Member.MakeNew(model.Name, model.EmailAddress, model.EmailAddress, umbJobMemberType, umbUser);
                 // WARNING: update to your desired MembertypeAlias...
-                var createMember = membershipService.CreateMember(model.Name, model.EmailAddress, model.EmailAddress, "CMember");
+                var createMember = membershipService.CreateMember(model.EmailAddress, model.EmailAddress, model.Name, "CMember");
 
                 //Set password on the newly created member
                 // TODO: Check if this actually works...
@@ -334,7 +328,7 @@ namespace U7StandardMembership.Controllers.SurfaceControllers
                 createMember.Properties["hasVerifiedEmail"].Value = false;
 
                 //Set the profile URL to be the member ID, so they have a unqie profile ID, until they go to set it
-                createMember.Properties["profileURL"].Value = createMember.Id;
+                createMember.Properties["profileURL"].Value = model.ProfileURL;
 
                 //Save the changes
                 membershipService.Save(createMember);
@@ -401,12 +395,18 @@ namespace U7StandardMembership.Controllers.SurfaceControllers
             }
             else
             {
+                //Update success flag (in a TempData key)
+                TempData["IsSuccessful"] = false;
+
                 //Couldn't find them - most likely invalid GUID
-                return Redirect("/");
+                return PartialView("VerifyEmail");
             }
 
-            //Just in case...
-            return Redirect("/");
+            //Update success flag (in a TempData key)
+            TempData["IsSuccessful"] = true;
+
+            //All sorted let's redirect to root/homepage
+            return PartialView("VerifyEmail");
         }
 
 
