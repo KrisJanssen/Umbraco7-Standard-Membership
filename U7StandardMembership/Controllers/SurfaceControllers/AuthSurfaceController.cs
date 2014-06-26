@@ -193,10 +193,9 @@ namespace U7StandardMembership.Controllers.SurfaceControllers
                 //Save the member with the up[dated property value
                 membershipService.Save(findMember);
 
-                // TODO: Implement the Email helper/send the Email :) 
                 //Send user an email to reset password with GUID in it
-                //EmailHelper email = new EmailHelper();
-                //email.SendResetPasswordEmail(findMember.Email, expiryTime.ToString("ddMMyyyyHHmmssFFFF"));
+                EmailHelper email = new EmailHelper();
+                email.SendResetPasswordEmail(findMember.Email, expiryTime.ToString("ddMMyyyyHHmmssFFFF"));
             }
             else
             {
