@@ -22,7 +22,6 @@ namespace U7StandardMembership.Controllers.SurfaceControllers
         {
         }
 
-        //public override ActionResult Index(RenderModel model)
         public override ActionResult Index(RenderModel  model)
         {
             //Get profileURLtoCheck
