@@ -2,6 +2,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using DataAnnotationsExtensions;
+using Umbraco.Web;
+using Umbraco.Core.Models;
+using System.Globalization;
+using Umbraco.Web.Models;
 
 namespace U7StandardMembership.Models
 {

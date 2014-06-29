@@ -15,7 +15,7 @@
     <div class="alert alert-danger">
         <h4>Forgotten your password?</h4>
         <p>
-            @Html.Raw("Don't worry we all forget our passwords from time to time and <a href='/forgotten-password' class='alert-link'>may need a reminder</a>."))
+            @Html.Raw("Don't worry we all forget our passwords from time to time and <a href='/forgotten-password' class='alert-link'>may need a reminder</a>.")
         </p>
 
         @foreach (ModelState modelState in ViewData.ModelState.Values)
@@ -55,7 +55,7 @@
 
         @Html.HiddenFor(Model => Model.ReturnUrl)
 
-        <button type="submit" class="btn btn-default">"Login"</button>
+        <button type="submit" class="btn btn-default">Login</button>
 
     </fieldset>
 }
